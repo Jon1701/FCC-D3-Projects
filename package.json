@@ -1,5 +1,5 @@
 {
-  "name": "fcc-d3-barchart",
+  "name": "fcc-d3-projects",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,9 +13,9 @@
   "author": "Jon1701",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Jon1701/FCC-D3-BarChart/issues"
+    "url": "https://github.com/Jon1701/FCC-D3-Projects/issues"
   },
-  "homepage": "https://github.com/Jon1701/FCC-D3-BarChart#readme",
+  "homepage": "https://github.com/Jon1701/FCC-D3-Projects#readme",
   "dependencies": {
     "d3": "^4.2.1",
     "gulp": "^3.9.1",
