@@ -5,11 +5,21 @@ var d3 = require('d3');
 var canvasWidth = 1000;
 var canvasHeight = 500;
 
+// Set canvas padding.
+var padding = 60;
+var leftShift = 1.5;
+var graphWidth = canvasWidth - 2*padding;
+var graphHeight = canvasHeight - 2*padding;
+
 // Access the SVG Canvas and set attributes.
 var svg = d3.select('#canvas')
             .attr('width', canvasWidth)
             .attr('height', canvasHeight);
 
+// Translation function.
+var translation = function(x,y) {
+  return 'translate(' + x + ',' + y + ')';
+}
 
 // Error callback function for d3.json.
 var jsonError = function(error) {
@@ -34,18 +44,31 @@ var jsonSuccess = function(data) {
   // Scales the independent variable's values to the canvas width.
   var xScale = d3.scaleLinear()
                   .domain([0, dataset.length])
-                  .range([0, canvasWidth]);
+                  .range([0, graphWidth]);
 
   // Scales the dependent variable's values to the canvas height.
   var yScale = d3.scaleLinear()
                   .domain([0, d3.max(dataset, function(d) {return d[1]})])
-                  .range([0, canvasHeight]);
+                  .range([graphHeight, 0]);
+
+  // x-axis.
+  var xAxis = d3.axisBottom(xScale);
+  svg.append('g')
+      .attr('transform', translation(padding*leftShift, graphHeight + padding))
+      .call(xAxis);
+
+  // y-axis.
+  var yAxis = d3.axisLeft(yScale);
+  svg.append('g')
+      .attr('transform', translation(padding*leftShift, padding))
+      .call(yAxis);
+
 
   // Set individual bar dimensions.
-  bars.attr('x', function(d, i) {return xScale(i)})
-      .attr('y', function(d, i) {return canvasHeight - yScale(d[1])})
+  bars.attr('x', function(d, i) {return xScale(i) + padding*leftShift})
+      .attr('y', function(d, i) {return yScale(d[1]) + padding})
       .attr('width', function(d, i) {return barWidth - 0.5})
-      .attr('height', function(d, i) {return yScale(d[1])})
+      .attr('height', function(d, i) {return graphHeight - yScale(d[1])})
 }
 
 // Get GDP data.
