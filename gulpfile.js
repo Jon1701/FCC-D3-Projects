@@ -15,12 +15,16 @@ var modulesPath = './node_modules/';
 
 // Webpack
 gulp.task('webpack', function() {
-  gulp.src(srcPath + 'javascript/index.js')
+  gulp.src(srcPath)
     .pipe(webpack({
       watch: true,
 
+      entry: {
+        'BarChart': [srcPath + 'javascript/BarChart.js']
+      },
+
       output: {
-        filename: 'app.js'
+        filename: '[name].js'
       }
     }))
     .pipe(gulp.dest(destPath + 'javascript/'));
