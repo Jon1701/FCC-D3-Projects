@@ -1,34 +1,3 @@
-var getUniqueYears = function(arr) {
-
-  // Array holding all the extracted years.
-  var yearsArray = [];
-
-  // Get all the years
-  for (var i=0; i<arr.length; i++) {
-
-    // Get the date.
-    var date = arr[i][0];
-
-    // Split into year, month, day.
-    var yearMonthDay = date.split('-');
-
-    // Get just the year.
-    var year = date.split('-')[0];
-
-    // Check to see if the year is already stored into yearsArray.
-    //
-    // If it is not stored, store it.
-    // If it is stored, skip to next element.
-    if (yearsArray.indexOf(year) == -1) {
-      yearsArray.push(year);
-    }
-
-  }
-
-  // Return a unique list of years within the data.
-  return yearsArray;
-}
-
 // Use d3 library.
 var d3 = require('d3');
 
