@@ -2,7 +2,7 @@
 var d3 = require('d3');
 
 // Define canvas dimensions.
-var canvasWidth = 2500;
+var canvasWidth = 1280;
 var canvasHeight = 700;
 
 // Set canvas padding.
@@ -102,6 +102,7 @@ var jsonSuccess = function(data) {
   // Set individual bar dimensions.
   bars.attr('x', function(d, i) {return xScale(new Date(d[0])) + padding*leftShift})
       .attr('y', function(d, i) {return yScale(d[1]) + padding})
+      .attr('class', 'graph-bar')
       .attr('width', function(d, i) {return barWidth - 0.5})
       .attr('height', function(d, i) {return graphHeight - yScale(d[1])})
 }

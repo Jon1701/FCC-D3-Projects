@@ -1,0 +1,25 @@
+body {
+  font-size: 100%;
+}
+
+#canvas {
+
+  // Fonts.
+  font-family: Arial;
+  font-size: 25px;
+
+  // Individual bar on bar graph.
+  .graph-bar {
+    fill: #34495E;
+  }
+
+  // Axis titles.
+  .axis-title {
+    fill: #000000;
+  }
+
+  // Graph title.
+  .graph-title {
+    font-size: 40px;
+  }
+}
