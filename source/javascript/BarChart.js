@@ -60,8 +60,6 @@ var jsonError = function(error) {
 // Success callback function for d3.json.
 var jsonSuccess = function(data) {
 
-
-
   // Access datapoints only.
   var dataset = data['data'];
 
@@ -98,18 +96,25 @@ var jsonSuccess = function(data) {
       .attr('transform', translation(padding*leftShift, padding))
       .call(yAxis);
 
+  // Horizontal axis label.
   var xAxisLabel = svg.append('text')
-                      .attr('id', 'x-axis-label')
-                      .attr('x', 100)
-                      .attr('y', 100)
-                      .text('X Label')
+                      .attr('class', 'axis-label')
+                      .attr('text-anchor', 'middle')
+                      .attr('transform', function() {
+                        var x = padding/2;
+                        var y = canvasHeight/2;
+                        var r = -90;
+                        return 'translate(' + x + ',' + y + ')rotate(' + r + ')';
+                      })
+                      .text('US Gross Domestic Product')
 
+  // Vertical axis label.
   var yAxisLabel = svg.append('text')
-                      .attr('id', 'y-axis-label')
-                      .attr('x', 200)
-                      .attr('y', 200)
-                      .text('Y Label')
-
+                      .attr('class', 'axis-label')
+                      .attr('text-anchor', 'middle')
+                      .attr('x', canvasWidth/2)
+                      .attr('y', canvasHeight - padding/2 + 15)
+                      .text('Year')
 
   // Set individual bar dimensions.
   bars.attr('x', function(d, i) {return xScale(new Date(d[0])) + padding*leftShift})
