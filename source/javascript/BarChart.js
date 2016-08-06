@@ -36,7 +36,35 @@ var jsonSuccess = function(data) {
   var bars = svg.selectAll('rect')
                 .data(dataset)
                 .enter()
-                .append('rect');
+                .append('rect')
+                .on('mouseover', function(data) {
+
+                    // Set the bar colour to red.
+                    d3.select(this).style('fill', '#DC143C');
+
+                    // Tooltip html
+                    var htmlStr = '';
+                        htmlStr += '<div class="text-center data-y">GDP: $' + data[1] + ' Billion</div><br/>';
+                        htmlStr += '<div class="text-center data-x">Date: ' + data[0] + '</div>';
+
+                    // Set tooltip HTML.
+                    tooltip.html(htmlStr);
+
+                    // Set tooltip style.
+                    tooltip.style('opacity', 1)
+                            .style('top', (d3.event.pageY) - 75 + 'px')
+                            .style('left', (d3.event.pageX) + 'px')
+
+                })
+                .on('mouseout', function(data) {
+
+                  // Set the bar colour to blue.
+                  d3.select(this).style('fill', '#34495E');
+
+                  // Hide tooltip.
+                  tooltip.style('opacity', 0);
+
+                });
 
   // Individual bar width.
   var barWidth = canvasWidth / dataset.length;
@@ -99,12 +127,17 @@ var jsonSuccess = function(data) {
                       .attr('y', padding/2)
                       .text('Gross Domestic Product');
 
+  var tooltip = d3.select('body')
+                  .append('div')
+                  .attr('class', 'tooltip')
+
   // Set individual bar dimensions.
   bars.attr('x', function(d, i) {return xScale(new Date(d[0])) + padding*leftShift})
       .attr('y', function(d, i) {return yScale(d[1]) + padding})
       .attr('class', 'graph-bar')
       .attr('width', function(d, i) {return barWidth - 0.5})
       .attr('height', function(d, i) {return graphHeight - yScale(d[1])})
+
 }
 
 // Get GDP data.
