@@ -2,7 +2,7 @@
 var d3 = require('d3');
 
 // Define canvas dimensions.
-var canvasWidth = 1500;
+var canvasWidth = 2500;
 var canvasHeight = 700;
 
 // Set canvas padding.
@@ -41,14 +41,20 @@ var jsonSuccess = function(data) {
   // Individual bar width.
   var barWidth = canvasWidth / dataset.length;
 
-  // Scales the
+  // Creates a Time Scale for the x-axis.
+  //
+  // Input domain is from the first date in the dataset to the last date.
+  // Output range is from 0 to graphWidth.
   var startDate = dataset[0][0]; // Start date.
   var endDate = dataset[dataset.length-1][0]; // End date.
   var xScale = d3.scaleTime()
                   .domain([new Date(startDate), new Date(endDate)])
                   .range([0, graphWidth]);
 
-  // Scales the dependent variable's values to the canvas height.
+  // Creates a Linear Scale for the y-axis.
+  //
+  // Input domain is from the smallest GDP in the dataset to the largest GDP.
+  // Output range is from graphHeight to 0.
   var yScale = d3.scaleLinear()
                   .domain([0, d3.max(dataset, function(d) {return d[1]})])
                   .range([graphHeight, 0]);
