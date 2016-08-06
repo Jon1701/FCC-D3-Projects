@@ -60,6 +60,8 @@ var jsonError = function(error) {
 // Success callback function for d3.json.
 var jsonSuccess = function(data) {
 
+
+
   // Access datapoints only.
   var dataset = data['data'];
 
@@ -95,6 +97,19 @@ var jsonSuccess = function(data) {
   svg.append('g')
       .attr('transform', translation(padding*leftShift, padding))
       .call(yAxis);
+
+  var xAxisLabel = svg.append('text')
+                      .attr('id', 'x-axis-label')
+                      .attr('x', 100)
+                      .attr('y', 100)
+                      .text('X Label')
+
+  var yAxisLabel = svg.append('text')
+                      .attr('id', 'y-axis-label')
+                      .attr('x', 200)
+                      .attr('y', 200)
+                      .text('Y Label')
+
 
   // Set individual bar dimensions.
   bars.attr('x', function(d, i) {return xScale(new Date(d[0])) + padding*leftShift})
