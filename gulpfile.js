@@ -20,7 +20,8 @@ gulp.task('webpack', function() {
       watch: true,
 
       entry: {
-        'BarChart': [srcPath + 'javascript/BarChart.js']
+        'BarChart': [srcPath + 'javascript/BarChart.js'],
+        'Scatterplot': [srcPath + 'javascript/Scatterplot.js'],        
       },
 
       output: {
