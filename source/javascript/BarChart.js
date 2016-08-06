@@ -96,9 +96,9 @@ var jsonSuccess = function(data) {
       .attr('transform', translation(padding*leftShift, padding))
       .call(yAxis);
 
-  // Horizontal axis label.
+  // Horizontal axis title.
   var xAxisLabel = svg.append('text')
-                      .attr('class', 'axis-label')
+                      .attr('class', 'axis-title')
                       .attr('text-anchor', 'middle')
                       .attr('transform', function() {
                         var x = padding/2;
@@ -106,15 +106,23 @@ var jsonSuccess = function(data) {
                         var r = -90;
                         return 'translate(' + x + ',' + y + ')rotate(' + r + ')';
                       })
-                      .text('US Gross Domestic Product')
+                      .text('US Gross Domestic Product');
 
-  // Vertical axis label.
+  // Vertical axis title.
   var yAxisLabel = svg.append('text')
-                      .attr('class', 'axis-label')
+                      .attr('class', 'axis-title')
                       .attr('text-anchor', 'middle')
                       .attr('x', canvasWidth/2)
                       .attr('y', canvasHeight - padding/2 + 15)
-                      .text('Year')
+                      .text('Year');
+
+  // Graph title.
+  var graphTitle = svg.append('text')
+                      .attr('class', 'graph-title')
+                      .attr('text-anchor', 'middle')
+                      .attr('x', canvasWidth/2)
+                      .attr('y', padding/2)
+                      .text('Gross Domestic Product');
 
   // Set individual bar dimensions.
   bars.attr('x', function(d, i) {return xScale(new Date(d[0])) + padding*leftShift})
