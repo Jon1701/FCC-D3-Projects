@@ -51,7 +51,7 @@ var jsonSuccess = function(data) {
                     tooltip.html(htmlStr);
 
                     // Set tooltip style.
-                    tooltip.style('opacity', 1)
+                    tooltip.style('visibility', 'visible')
                             .style('top', (d3.event.pageY) - 75 + 'px')
                             .style('left', (d3.event.pageX) + 'px')
 
@@ -62,7 +62,7 @@ var jsonSuccess = function(data) {
                   d3.select(this).style('fill', '#34495E');
 
                   // Hide tooltip.
-                  tooltip.style('opacity', 0);
+                  tooltip.style('visibility', 'hidden');
 
                 });
 
