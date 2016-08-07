@@ -27,6 +27,10 @@ var graph = {
     colour: {
       dopingYes: '#DC143C',
       dopingNo: '#333333'
+    },
+    size: {
+      default: 5,
+      mouseover: 10
     }
   },
   titles: {
@@ -245,6 +249,11 @@ var jsonSuccess = function(data) {
           }
         });
 
+  // Tooltips.
+  var tooltip = d3.select('body')
+                  .append('div')
+                  .attr('class', 'tooltip');
+
   // Paint data.
   var circles = svg.selectAll('circle')
                     .data(data)
@@ -253,7 +262,7 @@ var jsonSuccess = function(data) {
                     .attr('class', 'graph-circle')
                     .attr('cx', function(d) { return xScale(d.diff.Seconds) + canvas.padding.leftShift + canvas.padding.horizontal })
                     .attr('cy', function(d) { return yScale(d.Place) + canvas.padding.vertical })
-                    .attr('r', 5)
+                    .attr('r', graph.point.size.default)
                     .style('fill', function(d) {
 
                       // Set circle colour based on whether or not the athlete
@@ -270,20 +279,57 @@ var jsonSuccess = function(data) {
 
                       }
 
+                    }).on('mouseover', function(data) {
+
+                      // Increase circle size.
+                      d3.select(this)
+                        .style('r', graph.point.size.mouseover);
+
+                      // Extract doping allegation.
+                      // If string is blank, replace with 'No doping allegations'.
+                      var dopingStr = function(string) {
+
+                        // Check if empty String.
+                        if (string == '') {
+
+                          // Return No doping allegations.
+                          return 'No doping allegations';
+
+                        } else {
+
+                          // Return doping allegations.
+                          return string;
+
+                        }
+                      }(data['Doping']);
+
+                      // Build tooltip HTML.
+                      var htmlStr = '<div class="athlete">' + data['Name'] + '</div>';
+                          htmlStr += '<div class="nationality">' + data['Nationality'] + '</div>';
+                          htmlStr += '<div class="ranking">Ranking: #' + data['Place'] + '</div>';
+                          htmlStr += '<div class="year">Year: ' + data['Year'] + '</div>';
+                          htmlStr += '<div class="time">Time: ' + data['Time'] + '</div>';
+                          htmlStr += '<div class="doping">' + dopingStr + '</div>';
+
+                      // Add HTML to tooltip.
+                      tooltip.html(htmlStr);
+
+                      // Show tooltip and position.
+                      tooltip.style('visibility', 'visible')
+                              .style('top', (d3.event.pageY) - 75 + 'px')
+                              .style('left', (d3.event.pageX) + 'px')
+
+                    })
+                    .on('mouseout', function(d) {
+
+                      // Decrease circle size.
+                      d3.select(this).style('r', graph.point.size.default);
+
+                      // Hide tooltip.
+                      tooltip.style('visibility', 'hidden');
+
                     });
 
-  // Tooltips.
-  circles.on('mouseover', function(d) {
-    var div = d3.select('.tooltip');
-
-    var name = d['Name'];
-    var time = d['Time'];
-
-    console.log(d);
-
-    var htmlStr = '<div>' + time + '</div>';
-        htmlStr +=  '<div>' + name + '</div>';
-  });
 
 }
 

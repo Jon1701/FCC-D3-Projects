@@ -1,19 +1,41 @@
+body {
+    font-family: 'Arial', sans-serif;
+    font-size: 100%;
+}
+
 #canvas {
-  border: solid 1px black;
 
-  font-family: 'Arial', sans-serif;
-  font-size: 100%;
+  // Graph axis title font-size.
+  .axis-title { font-size: 25px; };
 
-  .axis-title {
-    font-size: 25px;
+  // Graph title font size.
+  .graph-title { font-size: 35px; };
+
+}
+
+.tooltip {
+  position: absolute;
+  border: solid 1px #CCCCCC;
+  background-color: #FFFFFF;
+
+  margin: 25px;
+  padding: 5px;
+
+  min-width: 200px ;
+  height: auto;
+
+  // Tooltip font size.
+  font-size: 14px;
+
+  // Tooltip items spacing and alignment.
+  div {
+    text-align: center;
+    margin-bottom: 10px;
   }
 
-  .graph-title {
-    font-size: 35px;
-  }
+  // Increase athlete name font size.
+  .athlete { font-size: 200%; };
 
-  .legend {
-    
-  }
-
+  // Increase athlete doping reason font weight.
+  .doping { font-weight: bold; };
 }
