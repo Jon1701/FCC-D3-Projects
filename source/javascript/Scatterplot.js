@@ -3,6 +3,35 @@
 ////////////////////////////////////////////////////////////////////////////////
 var d3 = require('d3');
 
+
+// Canvas properties.
+var canvas = {
+  width: 500,
+  height: 500,
+  padding: {
+    vertical: 50,
+    horizontal: 50
+  }
+}
+
+// Graph properties.
+var graph = {
+  width: canvas.width - 2*canvas.padding.horizontal,
+  height: canvas.height - 2*canvas.padding.vertical,
+  point: {
+    colour: {
+      dopingYes: '#DC143C',
+      dopingNo: '#333333'
+    }
+  }
+}
+
+
+// Translation function.
+var translation = function(x,y) {
+  return 'translate(' + x + ',' + y + ')';
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Get the largest time in the dataset in seconds.
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,28 +122,6 @@ function augmentData(data) {
   return data;
 }
 
-// Canvas properties.
-var canvas = {
-  width: 2000,
-  height: 500,
-  padding: {
-    vertical: 20,
-    horizontal: 20
-  }
-}
-
-// Graph properties.
-var graph = {
-  width: canvas.width - 2*canvas.padding.horizontal,
-  height: canvas.height - 2*canvas.padding.vertical,
-  point: {
-    colour: {
-      dopingYes: '#DC143C',
-      dopingNo: '#333333'
-    }
-  }
-}
-
 // Canvas.
 var svg = d3.select('#canvas')
             .attr('width', canvas.width)
@@ -135,8 +142,8 @@ var jsonSuccess = function(data) {
   // Horizontal scale.
   var xScale = d3.scaleLinear()
                   .domain([
-                    d3.min(data, function(d) { return d.diff.Seconds }),
-                    d3.max(data, function(d) { return d.diff.Seconds })
+                    d3.max(data, function(d) { return d.diff.Seconds }),
+                    d3.min(data, function(d) { return d.diff.Seconds })
                   ])
                   .range([0, graph.width]);
 
@@ -148,12 +155,20 @@ var jsonSuccess = function(data) {
                   ])
                   .range([0, graph.height]);
 
+  // Horizontal axis.
+  var xAxis = d3.axisBottom(xScale);
+  svg.append('g')
+      .attr('transform', translation(0 ,graph.height))
+      .call(xAxis)
+
+  console.log(d3.values(data.diff))
+
   // Paint data.
   var circles = svg.selectAll('circle')
                     .data(data)
                     .enter()
                     .append('circle')
-                    .attr('cx', function(d) { return graph.width - xScale(d.diff.Seconds) })
+                    .attr('cx', function(d) { return xScale(d.diff.Seconds) })
                     .attr('cy', function(d) { return yScale(d.Place) })
                     .attr('r', 5)
                     .style('fill', function(d) {
@@ -169,7 +184,7 @@ var jsonSuccess = function(data) {
 
                         // No doping accusation.
                         return graph.point.colour.dopingYes;
-                        
+
                       }
 
                     });
