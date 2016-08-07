@@ -168,8 +168,6 @@ var jsonSuccess = function(data) {
       .attr('transform', translation(canvas.padding.horizontal + canvas.padding.leftShift, canvas.padding.vertical))
       .call(yAxis)
 
-  console.log(d3.values(data.diff))
-
   // Paint data.
   var circles = svg.selectAll('circle')
                     .data(data)
