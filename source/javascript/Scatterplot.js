@@ -142,8 +142,6 @@ var jsonSuccess = function(data) {
                   ])
                   .range([0, graph.height]);
 
-
-
   // Paint data.
   var circles = svg.selectAll('circle')
                     .data(data)
