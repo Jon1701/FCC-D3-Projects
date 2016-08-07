@@ -271,6 +271,20 @@ var jsonSuccess = function(data) {
                       }
 
                     });
+
+  // Tooltips.
+  circles.on('mouseover', function(d) {
+    var div = d3.select('.tooltip');
+
+    var name = d['Name'];
+    var time = d['Time'];
+
+    console.log(d);
+
+    var htmlStr = '<div>' + time + '</div>';
+        htmlStr +=  '<div>' + name + '</div>';
+  });
+
 }
 
 // Load Cyclist Data.
