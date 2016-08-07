@@ -1,3 +1,15 @@
 #canvas {
   border: solid 1px black;
+
+  font-family: 'Arial', sans-serif;
+  font-size: 100%;
+
+  .axis-title {
+    font-size: 25px;
+  }
+
+  .graph-title {
+    font-size: 35px;
+  }
+
 }

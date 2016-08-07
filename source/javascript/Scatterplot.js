@@ -3,15 +3,19 @@
 ////////////////////////////////////////////////////////////////////////////////
 var d3 = require('d3');
 
+// Translation function.
+var translation = function(x, y, r) {
+  return 'translate(' + x + ',' + y + ')' + 'rotate(' + r + ')';
+}
 
 // Canvas properties.
 var canvas = {
-  width: 500,
+  width: 750,
   height: 500,
   padding: {
     leftShift: 5,
-    vertical: 50,
-    horizontal: 50
+    vertical: 80,
+    horizontal: 80
   }
 }
 
@@ -24,14 +28,18 @@ var graph = {
       dopingYes: '#DC143C',
       dopingNo: '#333333'
     }
+  },
+  titles: {
+    graph: 'Doping in Professional Bicycle Racing',
+    axis: {
+      x: 'Minutes Behind Fastest Time (MM:SS)',
+      y: 'Athlete Rank'
+    }
   }
 }
 
 
-// Translation function.
-var translation = function(x, y, r) {
-  return 'translate(' + x + ',' + y + ')' + 'rotate(' + r + ')';
-}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get the largest time in the dataset in seconds.
@@ -170,28 +178,31 @@ var jsonSuccess = function(data) {
 
   // Horizontal axis label.
   var xAxisLabel = svg.append('text')
+                      .attr('class', 'axis-title')
                       .attr('text-anchor', 'middle')
                       .attr('transform', translation(canvas.width/2 + canvas.padding.leftShift, canvas.height - canvas.padding.vertical/2 + 15 , 0))
-                      .text('Minutes Behind Fastest Time');
+                      .text(graph.titles.axis.x);
 
   // Vertical axis label.
   var yAxisLabel = svg.append('text')
+                      .attr('class', 'axis-title')
                       .attr('text-anchor', 'middle')
                       .attr('transform', translation(canvas.padding.horizontal/2, canvas.height/2, -90))
-                      .text('Athlete Rank');
+                      .text(graph.titles.axis.y);
 
   // Graph title.
   var title = svg.append('text')
+                  .attr('class', 'graph-title')
                   .attr('text-anchor', 'middle')
                   .attr('transform', translation(canvas.width/2 + canvas.padding.leftShift, canvas.padding.vertical/2, 0))
-                  .text('Doping in Professional Bicycle Racing');
-
+                  .text(graph.titles.graph);
 
   // Paint data.
   var circles = svg.selectAll('circle')
                     .data(data)
                     .enter()
                     .append('circle')
+                    .attr('class', 'graph-circle')
                     .attr('cx', function(d) { return xScale(d.diff.Seconds) + canvas.padding.leftShift + canvas.padding.horizontal })
                     .attr('cy', function(d) { return yScale(d.Place) + canvas.padding.vertical })
                     .attr('r', 5)
