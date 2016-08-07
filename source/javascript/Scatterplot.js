@@ -106,7 +106,13 @@ var canvas = {
 // Graph properties.
 var graph = {
   width: canvas.width - 2*canvas.padding.horizontal,
-  height: canvas.height - 2*canvas.padding.vertical
+  height: canvas.height - 2*canvas.padding.vertical,
+  point: {
+    colour: {
+      dopingYes: '#DC143C',
+      dopingNo: '#333333'
+    }
+  }
 }
 
 // Canvas.
@@ -149,7 +155,24 @@ var jsonSuccess = function(data) {
                     .append('circle')
                     .attr('cx', function(d) { return graph.width - xScale(d.diff.Seconds) })
                     .attr('cy', function(d) { return yScale(d.Place) })
-                    .attr('r', 5);
+                    .attr('r', 5)
+                    .style('fill', function(d) {
+
+                      // Set circle colour based on whether or not the athlete
+                      // has a doping accusation.
+                      if (d.Doping == '') {
+
+                        // Doping accusation.
+                        return graph.point.colour.dopingNo;
+
+                      } else {
+
+                        // No doping accusation.
+                        return graph.point.colour.dopingYes;
+                        
+                      }
+
+                    });
 }
 
 // Load Cyclist Data.
