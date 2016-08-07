@@ -29,8 +29,8 @@ var graph = {
 
 
 // Translation function.
-var translation = function(x,y) {
-  return 'translate(' + x + ',' + y + ')';
+var translation = function(x, y, r) {
+  return 'translate(' + x + ',' + y + ')' + 'rotate(' + r + ')';
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -159,13 +159,13 @@ var jsonSuccess = function(data) {
   // Horizontal axis.
   var xAxis = d3.axisBottom(xScale);
   svg.append('g')
-      .attr('transform', translation(canvas.padding.horizontal + canvas.padding.leftShift, canvas.padding.vertical + graph.height))
+      .attr('transform', translation(canvas.padding.horizontal + canvas.padding.leftShift, canvas.padding.vertical + graph.height, 0))
       .call(xAxis)
 
   // Vertical axis.
   var yAxis = d3.axisLeft(yScale);
   svg.append('g')
-      .attr('transform', translation(canvas.padding.horizontal + canvas.padding.leftShift, canvas.padding.vertical))
+      .attr('transform', translation(canvas.padding.horizontal + canvas.padding.leftShift, canvas.padding.vertical, 0))
       .call(yAxis)
 
   // Paint data.
