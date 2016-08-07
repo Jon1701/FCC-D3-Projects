@@ -1,7 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
 // Required libraries.
+////////////////////////////////////////////////////////////////////////////////
 var d3 = require('d3');
 
+////////////////////////////////////////////////////////////////////////////////
 // Get the largest time in the dataset in seconds.
+////////////////////////////////////////////////////////////////////////////////
 function getFastestTime(data) {
 
   // All seconds in the dataset.
@@ -24,7 +28,9 @@ function getFastestTime(data) {
   return allSeconds[0];
 }
 
+////////////////////////////////////////////////////////////////////////////////
 // Converts a string of the form mm:ss into seconds.
+////////////////////////////////////////////////////////////////////////////////
 function mmssToSeconds(timeStr) {
 
   // Split the mm:ss string into mm and ss
@@ -37,21 +43,34 @@ function mmssToSeconds(timeStr) {
   return mmss[0] * 60 + mmss[1];
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Converts the number of seconds (in integers) into a string of the form mm:ss.
+////////////////////////////////////////////////////////////////////////////////
 function secondsToMmss(seconds) {
 
+  // Calculate number of minutes.
   var minutesString = String(Math.floor(seconds/60));
-  var secondsString = '';
 
+  // Calculate number of seconds.
+  var secondsString = String(seconds % 60);
+
+  // Format number of seconds to be double digits if number of seconds is less
+  // than 10.
   if (seconds % 60 < 10) {
     secondsString = '0' + String(seconds % 60);
-  } else {
-    secondsString = String(seconds % 60);
   }
 
+  // Return formatted string.
   return [minutesString, secondsString].join(':');
-
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Modifies a copy of the dataset.
+//
+// Takes the Seconds and Time properties/values which are relative to 00:00 and
+// augment the data with the same properties, but the values are to be relative
+// to the fastest runner (smallest Seconds value).
+////////////////////////////////////////////////////////////////////////////////
 function augmentData(data) {
 
   // Get fastest time.
@@ -60,36 +79,20 @@ function augmentData(data) {
   // Go through the dataset.
   for (var i=0; i<data.length; i++) {
 
+    // Augmented data will be stored in the 'diff' property.
     data[i]['diff'] = {}
-    data[i]['diff']['Seconds'] = data[i]['Seconds'] - fastestTime;
-    data[i]['diff']['Time'] = secondsToMmss(data[i]['diff']['Seconds']);
 
+    // Calculate seconds relative to fastest runner.
+    data[i]['diff']['Seconds'] = data[i]['Seconds'] - fastestTime;
+
+    // Convert seconds to MM:SS format.
+    data[i]['diff']['Time'] = secondsToMmss(data[i]['diff']['Seconds']);
   }
 
+  // Return the augmented data.
   return data;
 }
-/*
-function secondsDifference(maxSeconds, timeStr) {
-  return maxSeconds - mmssToSeconds(timeStr);
-}
 
-function secondsToMmss(time) {
-
-  var minutes = Math.floor(time/60);
-  var seconds = time - minutes * 60;
-
-  var strMinutes = String(minutes);
-  var strSeconds = 0
-
-    if (seconds < 10) {
-      strSeconds = '0' + String(seconds);
-    } else {
-      strSeconds = String(seconds)
-    }
-
-  return [strMinutes, strSeconds].join(':')
-}
-*/
 // Canvas properties.
 var canvas = {
   width: 2000,
@@ -119,36 +122,36 @@ var jsonError = function(error) {
 // Callback to handle data retrieved from AJAX request.
 var jsonSuccess = function(data) {
 
-  data = augmentData(data)
-  console.log(data);
+  // Update data to include modified Time and Seconds values to be relative to
+  // the fastest runner.
+  data = augmentData(data);
 
   // Horizontal scale.
-  var xScale = d3.scaleTime();
+  var xScale = d3.scaleLinear()
+                  .domain([
+                    d3.min(data, function(d) { return d.diff.Seconds }),
+                    d3.max(data, function(d) { return d.diff.Seconds })
+                  ])
+                  .range([0, graph.width]);
+
+  // Vertical scale.
+  var yScale = d3.scaleLinear()
+                  .domain([
+                    d3.min(data, function(d) { return d.Place }),
+                    d3.max(data, function(d) { return d.Place })
+                  ])
+                  .range([0, graph.height]);
+
+
 
   // Paint data.
   var circles = svg.selectAll('circle')
                     .data(data)
                     .enter()
                     .append('circle')
-                    .attr('cx', function(d) {
-
-
-                      return 1;
-                    })
-                    .attr('cy', function(d) {return d.place})
-                    .attr('r', 50);
-
-
-
-
-  // Go through the data.
-  /*
-  for(var i=0; i<data.length; i++) {
-    var time = data[i]['Time'];
-
-    console.log(time)
-  }*/
-
+                    .attr('cx', function(d) { return graph.width - xScale(d.diff.Seconds) })
+                    .attr('cy', function(d) { return yScale(d.Place) })
+                    .attr('r', 5);
 }
 
 // Load Cyclist Data.
