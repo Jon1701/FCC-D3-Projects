@@ -1,4 +1,36 @@
-//Debug styles
-#canvas {
-  border: solid 1px black;
+body {
+  font-family: 'Arial', sans-serif;
+  font-size: 100%;
+}
+
+#chart-list {
+
+  text-align: center;
+  width: 95%;
+  margin: 0 auto;
+
+  .section-title {
+    padding: 25px;
+  }
+
+  .container-chart {
+    border: solid 1px #333333;
+    margin: 1px;
+
+    a {
+      padding: 25px;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    &:hover {
+      display: block;
+      background-color: #333333;
+      color: #FFFFFF;
+      cursor: pointer;
+    }
+  }
+
+
 }
