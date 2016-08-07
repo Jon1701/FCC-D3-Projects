@@ -35,6 +35,17 @@ var graph = {
       x: 'Minutes Behind Fastest Time (MM:SS)',
       y: 'Athlete Rank'
     }
+  },
+  legend: {
+    dimensions: {
+      width: 25,
+      height: 25
+    },
+    position: {
+      x: canvas.width - canvas.padding.horizontal,
+      y: canvas.height - canvas.padding.vertical
+    }
+
   }
 }
 
@@ -196,6 +207,46 @@ var jsonSuccess = function(data) {
                   .attr('text-anchor', 'middle')
                   .attr('transform', translation(canvas.width/2 + canvas.padding.leftShift, canvas.padding.vertical/2, 0))
                   .text(graph.titles.graph);
+
+  // Legend container.
+  var legend = svg.selectAll('.legend')
+                  .data(['dopingYes','dopingNo'])
+                  .enter()
+                  .append('g')
+                  .attr('class', 'legend')
+                  .attr('transform', function(d, i) {
+                    var padding = 5;
+                    var height = graph.legend.dimensions.height + padding;
+                    var width = graph.legend.dimensions.width + padding;
+
+                    var x = graph.legend.position.x - width*6 - 3;
+                    var y = graph.legend.position.y + (height * i) - (height*2);
+                    return translation(x, y, 0);
+                  })
+
+  // Add legend keys.
+  legend.append('rect')
+        .attr('width', graph.legend.dimensions.width)
+        .attr('height', graph.legend.dimensions.height)
+        .style('fill', function(d) {
+          if (d == 'dopingYes') {
+            return graph.point.colour.dopingYes;
+          } else {
+            return graph.point.colour.dopingNo;
+          }
+        });
+
+  // Add legend text.
+  legend.append('text')
+        .attr('x', graph.legend.dimensions.width + 5)
+        .attr('y', graph.legend.dimensions.height - 7)
+        .text(function(d) {
+          if (d == 'dopingYes') {
+            return 'Accused of doping'
+          } else {
+            return 'Not accused of doping'
+          }
+        });
 
   // Paint data.
   var circles = svg.selectAll('circle')
