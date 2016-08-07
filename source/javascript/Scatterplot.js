@@ -9,6 +9,7 @@ var canvas = {
   width: 500,
   height: 500,
   padding: {
+    leftShift: 5,
     vertical: 50,
     horizontal: 50
   }
@@ -158,8 +159,14 @@ var jsonSuccess = function(data) {
   // Horizontal axis.
   var xAxis = d3.axisBottom(xScale);
   svg.append('g')
-      .attr('transform', translation(canvas.padding.horizontal , canvas.padding.vertical + graph.height))
+      .attr('transform', translation(canvas.padding.horizontal + canvas.padding.leftShift, canvas.padding.vertical + graph.height))
       .call(xAxis)
+
+  // Vertical axis.
+  var yAxis = d3.axisLeft(yScale);
+  svg.append('g')
+      .attr('transform', translation(canvas.padding.horizontal + canvas.padding.leftShift, canvas.padding.vertical))
+      .call(yAxis)
 
   console.log(d3.values(data.diff))
 
@@ -168,7 +175,7 @@ var jsonSuccess = function(data) {
                     .data(data)
                     .enter()
                     .append('circle')
-                    .attr('cx', function(d) { return xScale(d.diff.Seconds) + canvas.padding.horizontal })
+                    .attr('cx', function(d) { return xScale(d.diff.Seconds) + canvas.padding.leftShift + canvas.padding.horizontal })
                     .attr('cy', function(d) { return yScale(d.Place) + canvas.padding.vertical })
                     .attr('r', 5)
                     .style('fill', function(d) {
