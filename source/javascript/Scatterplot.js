@@ -168,6 +168,25 @@ var jsonSuccess = function(data) {
       .attr('transform', translation(canvas.padding.horizontal + canvas.padding.leftShift, canvas.padding.vertical, 0))
       .call(yAxis)
 
+  // Horizontal axis label.
+  var xAxisLabel = svg.append('text')
+                      .attr('text-anchor', 'middle')
+                      .attr('transform', translation(canvas.width/2 + canvas.padding.leftShift, canvas.height - canvas.padding.vertical/2 + 15 , 0))
+                      .text('Minutes Behind Fastest Time');
+
+  // Vertical axis label.
+  var yAxisLabel = svg.append('text')
+                      .attr('text-anchor', 'middle')
+                      .attr('transform', translation(canvas.padding.horizontal/2, canvas.height/2, -90))
+                      .text('Athlete Rank');
+
+  // Graph title.
+  var title = svg.append('text')
+                  .attr('text-anchor', 'middle')
+                  .attr('transform', translation(canvas.width/2 + canvas.padding.leftShift, canvas.padding.vertical/2, 0))
+                  .text('Doping in Professional Bicycle Racing');
+
+
   // Paint data.
   var circles = svg.selectAll('circle')
                     .data(data)
