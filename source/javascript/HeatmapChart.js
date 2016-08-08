@@ -6,7 +6,7 @@ var d3 = require('d3');
 ////////////////////////////////////////////////////////////////////////////////
 canvas = {
   dimensions: {
-    width: 500,
+    width: 1280,
     height: 600
   },
   padding: {
@@ -26,6 +26,10 @@ graph = {
       x: 'Years',
       y: 'Months'
     }
+  },
+  legend: {
+    width: 35,
+    height: 15
   }
 }
 
@@ -188,6 +192,14 @@ var jsonSuccess = function(dataset) {
                       .attr('transform', translation(canvas.padding.horizontal/2, canvas.dimensions.height/2 , -90))
                       .text(graph.titles.axis.y);
 
+  // Graph title.
+  var title = svg.append('text')
+                  .attr('class', 'graph-title')
+                  .attr('text-anchor', 'middle')
+                  .attr('transform', translation(canvas.dimensions.width/2 , canvas.padding.vertical/2-15, 0))
+                  .text(graph.titles.graph);
+
+
   // Create Heatmap cells.
   cells.attr('x', function(d, i) { return xScale(d['year']) + canvas.padding.horizontal })
         .attr('y', function(d, i) { return yScale(d['month']) + canvas.padding.vertical })
@@ -199,7 +211,60 @@ var jsonSuccess = function(dataset) {
 
         });
 
-//console.log(buildLegendDomainRange(temperatureRange, colourScale))
+  // Legend container.
+  // Get the temperatures and colours for use with the legend.
+  var legendInfo = buildLegendDomainRange(temperatureRange, colourScale);
+
+  // Temperatures and colours.
+  var legendTemperatures = legendInfo[0];
+  var legendColours = legendInfo[1];
+
+  var legend = svg.selectAll('.legend')
+                  .data(legendTemperatures)
+                  .enter()
+                  .append('g')
+                  .attr('class', 'legend')
+                  .attr('transform', function(d, i) {
+
+                    var height = graph.legend.height;
+                    var width = graph.legend.width;
+
+                    var x = i*width + (canvas.dimensions.width) / 2 - 2.5*canvas.padding.horizontal;
+                    var y = canvas.dimensions.height - canvas.padding.vertical + 55;
+
+                    return translation(x,y,0)
+                  });
+
+  // Add colour rectangles to the legend.
+  legend.append('rect')
+        .attr('width', graph.legend.width)
+        .attr('height', graph.legend.height)
+        .style('fill', function(d) {
+          return colourScale(d);
+        });
+
+  // Add text rectangles to the legend.
+  legend.append('text')
+        .attr('x', function(d,i) {
+
+          var height = graph.legend.height;
+          var width = graph.legend.width;
+
+          return i-7
+        })
+        .attr('y', function(d,i) {
+          return 30
+        })
+        .text(function(d, i) {
+          if (i == 0 || i == 13) {
+            return d + '°C';
+          } else {
+            return ''
+          }
+
+        });
+
+//console.log()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
