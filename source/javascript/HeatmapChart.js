@@ -6,7 +6,7 @@ var d3 = require('d3');
 ////////////////////////////////////////////////////////////////////////////////
 canvas = {
   dimensions: {
-    width: 1920,
+    width: 500,
     height: 600
   },
   padding: {
@@ -19,9 +19,35 @@ graph = {
   dimensions: {
     width: canvas.dimensions.width - 2*canvas.padding.horizontal,
     height: canvas.dimensions.height - 2*canvas.padding.vertical
+  },
+  titles: {
+    graph: 'Monthly Global Land-Surface Temperatures from 1753 to 2015',
+    axis: {
+      x: 'Years',
+      y: 'Months'
+    }
   }
 }
 
+// Translation function.
+var translation = function(x, y, r) {
+  return 'translate(' + x + ',' + y + ')' + 'rotate(' + r + ')';
+}
+
+var numToMonthMapping = {
+  1: 'January',
+  2: 'February',
+  3: 'March',
+  4: 'April',
+  5: 'May',
+  6: 'June',
+  7: 'July',
+  8: 'August',
+  9: 'September',
+  10: 'October',
+  11: 'November',
+  12: 'December'
+}
 ////////////////////////////////////////////////////////////////////////////////
 // Function used to build an array of integers which will map into an
 // array of colours to be used for the legend
@@ -114,7 +140,7 @@ var jsonSuccess = function(dataset) {
                       .range(['#FFA500', '#8B0000']);
 
   // Horizontal scale. Years to canvas width.
-  var xScale = d3.scaleTime()
+  var xScale = d3.scaleLinear()
                   .domain([
                     d3.min(monthlyVariance, function(d) { return d['year']; }),
                     d3.max(monthlyVariance, function(d) { return d['year']; })
@@ -122,12 +148,45 @@ var jsonSuccess = function(dataset) {
                   .range([0, graph.dimensions.width]);
 
   // Vertical scale. Months to canvas height.
-  var yScale = d3.scaleTime()
+  var yScale = d3.scaleLinear()
                   .domain([
                     d3.min(monthlyVariance, function(d) { return d['month']; }),
                     d3.max(monthlyVariance, function(d) { return d['month']; })
                   ])
                   .range([0, graph.dimensions.height]);
+
+  // Horizontal axis.
+  var xAxis = d3.axisTop(xScale)
+                .tickFormat(d3.format('d'))
+  svg.append('g')
+      .attr('transform', translation(canvas.padding.horizontal, canvas.padding.vertical, 0))
+      .call(xAxis);
+
+  // Vertical axis.
+  var yAxis = d3.axisLeft(yScale)
+                .tickFormat(function(d) {
+
+                  // Rename month numbers to name.
+                  return numToMonthMapping[d];
+
+                });
+  svg.append('g')
+      .attr('transform', translation(canvas.padding.horizontal, canvas.padding.vertical + 18, 0))
+      .call(yAxis);
+
+  // Horizontal axis label.
+  var xAxisLabel = svg.append('text')
+                      .attr('class', 'axis-title')
+                      .attr('text-anchor', 'middle')
+                      .attr('transform', translation(canvas.dimensions.width/2, canvas.padding.vertical/2 + 25 , 0))
+                      .text(graph.titles.axis.x);
+
+  // Vertical axis label.
+  var yAxisLabel = svg.append('text')
+                      .attr('class', 'axis-title')
+                      .attr('text-anchor', 'middle')
+                      .attr('transform', translation(canvas.padding.horizontal/2, canvas.dimensions.height/2 , -90))
+                      .text(graph.titles.axis.y);
 
   // Create Heatmap cells.
   cells.attr('x', function(d, i) { return xScale(d['year']) + canvas.padding.horizontal })
