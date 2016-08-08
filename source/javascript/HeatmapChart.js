@@ -199,6 +199,10 @@ var jsonSuccess = function(dataset) {
                   .attr('transform', translation(canvas.dimensions.width/2 , canvas.padding.vertical/2-15, 0))
                   .text(graph.titles.graph);
 
+  // Tooltips.
+  var tooltip = d3.select('body')
+                  .append('div')
+                  .attr('class', 'tooltip');
 
   // Create Heatmap cells.
   cells.attr('x', function(d, i) { return xScale(d['year']) + canvas.padding.horizontal })
@@ -206,9 +210,33 @@ var jsonSuccess = function(dataset) {
         .attr('width', graph.dimensions.width/(monthlyVariance.length/12))
         .attr('height', graph.dimensions.height/12 + 3 )
         .attr('fill', function(d) {
-
           return colourScale(d['temperature']);
+        })
+        .on('mouseover', function(d) {
 
+          // Data.
+          var year = d['year'];
+          var month = numToMonthMapping[d['month']];
+          var temperature = d['temperature'] + '°C';
+          var variance = d['variance'] + '°C';
+
+          // Build tooltip html.
+          var htmlStr = '<div>' + month + ' of ' + year + '</div>';
+              htmlStr += '<div>Temperature relative to January 1951 to December 1980 average: <br/>' + '<strong>' +  temperature + '</strong>' + '</div>';
+
+          // Render html tooltip.
+          tooltip.html(htmlStr);
+
+          // Show tooltip and position.
+          tooltip.style('visibility', 'visible')
+                  .style('top', (d3.event.pageY) - 75 + 'px')
+                  .style('left', (d3.event.pageX) + 'px')
+        })
+        .on('mouseout', function() {
+          // Show tooltip and position.
+          tooltip.style('visibility', 'visible')
+                  .style('top', (d3.event.pageY) - 75 + 'px')
+                  .style('left', (d3.event.pageX) + 'px')
         });
 
   // Legend container.
@@ -264,7 +292,9 @@ var jsonSuccess = function(dataset) {
 
         });
 
-//console.log()
+
+
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
