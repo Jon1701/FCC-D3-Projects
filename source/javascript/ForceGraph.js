@@ -57,6 +57,9 @@ var jsonSuccess = function(dataset) {
                   .attr('xlink:href', function(d) { return './media/images/flags/' + d.code + '.png'; })  // Image source
                   .call(force.drag);
 
+  // Node tooltips.
+  nodes.append('svg:title').text(function(d) { return d.country});
+
   force.on('tick', function() {
 
     // Set edge position.
@@ -72,7 +75,6 @@ var jsonSuccess = function(dataset) {
   });
 
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Callback to handle AJAX request errors
