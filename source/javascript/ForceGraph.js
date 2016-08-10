@@ -4,18 +4,18 @@ var d3 = require('./d3/v3.5.1/d3.js');
 // Canvas and graph settings.
 var canvas = {
   dim: {
-    w: 500,
-    h: 500
+    w: 800,
+    h: 800
   },
 
   graph: {
     nodes: {
-      r: 5,
-      colour: 'orange'
+      width: 20,
+      height: 15
     },
     links: {
-      strokewidth: 1,
-      colour: 'black'
+      strokewidth: 0.5,
+      colour: 'white'
     }
   }
 }
@@ -35,8 +35,8 @@ var jsonSuccess = function(dataset) {
                 .nodes(dataset.nodes) // Nodes
                 .links(dataset.links) // Edges
                 .size([canvas.dim.w, canvas.dim.h]) // Maximum size
-                .linkDistance([10])    // Distance of edges between nodes.
-                .charge([-100])
+                .linkDistance([20])   // Distance of edges between nodes.
+                .charge([-100])       // Force initial chart
                 .start();
 
   // Create node links.
@@ -44,28 +44,31 @@ var jsonSuccess = function(dataset) {
                   .data(dataset.links)    // Bind svg lines to data
                   .enter()                // Iterate through link data
                   .append('line')         // Add svg lines
-                  .attr('stroke-width', canvas.graph.links.strokewidth) // Stroke size
-                  .attr('stroke', canvas.graph.links.colour);
-
+                  .attr('stroke', canvas.graph.links.colour)  // Stroke colour
+                  .attr('stroke-width', canvas.graph.links.strokewidth); // Stroke size
 
   // Create nodes.
-  var nodes = svg.selectAll('circle')    // Select all svg circles
-                  .data(dataset.nodes)    // Bind svg circles to data
-                  .enter()                // Iterate through node data
-                  .append('circle')       // Add svg circle.
-                  .attr('r', canvas.graph.nodes.r) // Circle radius
-                  .attr('fill', canvas.graph.nodes.colour) // Circle bg colour.
+  var nodes = svg.selectAll('image')   // Select all svg images
+                  .data(dataset.nodes) // Bind to data
+                  .enter()             // Iterate through node data
+                  .append('svg:image') // Add svg image.
+                  .attr('width', canvas.graph.nodes.width)   // Image width
+                  .attr('height', canvas.graph.nodes.height) // Image height
+                  .attr('xlink:href', function(d) { return './media/images/flags/' + d.code + '.png'; })  // Image source
                   .call(force.drag);
 
   force.on('tick', function() {
 
+    // Set edge position.
     edges.attr('x1', function(d) { return d.source.x; })
           .attr('y1', function(d) { return d.source.y; })
           .attr('x2', function(d) { return d.target.x; })
           .attr('y2', function(d) { return d.target.y; });
 
-    nodes.attr('cx', function(d) { return d.x; })
-          .attr('cy', function(d) { return d.y; });
+    // Set node position.
+    nodes.attr('x', function(d) { return d.x-(canvas.graph.nodes.width/2); })
+          .attr('y', function(d) { return d.y-(canvas.graph.nodes.height/2); });
+
   });
 
 }
