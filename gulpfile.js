@@ -39,6 +39,12 @@ gulp.task('data', function() {
     .pipe(gulp.dest(destPath + 'datasets/'));
 });
 
+// Move media.
+gulp.task('media', function() {
+  gulp.src(srcPath + 'media/**/*')
+    .pipe(gulp.dest(destPath + 'media/'));
+});
+
 // Compile .scss and move.
 gulp.task('stylesheets', function() {
   gulp.src(srcPath + 'stylesheets/**/*')
@@ -77,4 +83,4 @@ gulp.task('watch', function() {
 ////////////////////////////////////////////////////////////////////////////////
 // Default task
 ////////////////////////////////////////////////////////////////////////////////
-gulp.task('default', ['webserver', 'watch', 'data', 'stylesheets', 'html', 'webpack']);
+gulp.task('default', ['webserver', 'watch', 'data', 'media', 'stylesheets', 'html', 'webpack']);
