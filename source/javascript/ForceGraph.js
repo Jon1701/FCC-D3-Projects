@@ -14,8 +14,8 @@ var canvas = {
       height: 15
     },
     links: {
-      strokewidth: 0.5,
-      colour: 'white'
+      strokewidth: 0.75,
+      colour: 'black'
     }
   }
 }
