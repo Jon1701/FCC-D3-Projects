@@ -23,7 +23,8 @@ gulp.task('webpack', function() {
         'BarChart': [srcPath + 'javascript/BarChart.js'],
         'Scatterplot': [srcPath + 'javascript/Scatterplot.js'],
         'HeatmapChart': [srcPath + 'javascript/HeatmapChart.js'],
-        'ForceGraph': [srcPath + 'javascript/ForceGraph.js']
+        'ForceGraph': [srcPath + 'javascript/ForceGraph.js'],
+        'GeoMap': [srcPath + 'javascript/GeoMap.js'],
       },
 
       output: {
