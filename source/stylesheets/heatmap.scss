@@ -5,6 +5,15 @@ body {
 
 #canvas {
 
+  // Center alignment.
+  display: block;
+  margin: 0 auto;
+
+  // Border and padding.
+  border: solid 1px #333333;
+  padding: 100px;
+
+
   // Graph axis title font-size.
   .axis-title { font-size: 25px; };
 

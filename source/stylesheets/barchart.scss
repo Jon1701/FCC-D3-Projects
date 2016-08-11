@@ -9,6 +9,7 @@ body {
   text-align: center;
 }
 
+// Graph tooltip.
 .tooltip {
   position: absolute;
   border: solid 1px #CCCCCC;
@@ -24,9 +25,16 @@ body {
 
   font-size: 15px;
 }
+
 #canvas {
 
+  // Center alignment.
+  display: block;
+  margin: 0 auto;
 
+  // Border and padding.
+  border: solid 1px #333333;
+  padding: 100px;
 
   // Individual bar on bar graph.
   .graph-bar {
