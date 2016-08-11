@@ -4,8 +4,8 @@ var d3 = require('d3');
 // Canvas and graph settings.
 var canvas = {
   dim: {
-    w: 500,
-    h: 500
+    w: 700,
+    h: 700
   },
 
   graph: {
@@ -17,10 +17,46 @@ var canvas = {
 ////////////////////////////////////////////////////////////////////////////////
 var jsonSuccess = function(dataset) {
 
-  // Access the canvas and modify dimensions.
+  // SVG canvas.
   var svg = d3.select('#canvas')
               .attr('width', canvas.dim.w)  // Canvas width
               .attr('height', canvas.dim.h);// Canvas height
+
+  // Mercator projection.
+  var projMercator = d3.geoMercator()
+                    .translate([canvas.dim.w/2, canvas.dim.h/2])
+                    .scale([110])
+
+  // Geopath generator.
+  var path = d3.geoPath()
+                .projection(projMercator)
+
+  // Map Group
+  var map = svg.append('g')
+
+  // Meteorite Group.
+  var meteorite = svg.append('g')
+
+
+  // Paint meteorite impacts on map
+  meteorite.selectAll('path')
+            .data(dataset.features)
+            .enter()
+            .append('path')
+            .attr('d', path)
+            .attr('fill', 'orange')
+
+  // Load world map.
+  d3.json('./datasets/countries.geo.json', function(error, result) {
+
+    // Add map to the svg canvas.
+    map.selectAll('path')
+        .data(result.features)
+        .enter()
+        .append('path')
+        .attr('d', path);
+
+  });
 
 }
 
