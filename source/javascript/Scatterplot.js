@@ -36,7 +36,7 @@ var graph = {
   titles: {
     graph: 'Doping in Professional Bicycle Racing',
     axis: {
-      x: 'Minutes Behind Fastest Time (MM:SS)',
+      x: 'Minutes Behind Fastest Time',
       y: 'Athlete Rank'
     }
   },
