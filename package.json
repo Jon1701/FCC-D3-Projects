@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jon1701/FCC-D3-BarChart.git"
+    "url": "git+https://github.com/Jon1701/FCC-D3Projects.git"
   },
   "author": "Jon1701",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Jon1701/FCC-D3-Projects/issues"
+    "url": "https://github.com/Jon1701/FCC-D3Projects/issues"
   },
-  "homepage": "https://github.com/Jon1701/FCC-D3-Projects#readme",
+  "homepage": "https://github.com/Jon1701/FCC-D3Projects#readme",
   "dependencies": {
     "d3": "^4.2.1",
     "d3-axis": "^1.0.3",
