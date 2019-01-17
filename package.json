@@ -22,7 +22,9 @@
   "dependencies": {
     "d3": "^4.2.1",
     "d3-axis": "^1.0.3",
-    "d3-force": "^1.0.2",
+    "d3-force": "^1.0.2"
+  },
+  "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-sass": "^2.3.2",
     "gulp-webserver": "^0.9.1",
